@@ -10,20 +10,18 @@ Next, download this [R Script](https://github.com/MurugashManavalan/Plant_Trait_
 
 # Major Sections 
 
-- [Transformation and Normality Testing of Response Variables](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L50-L94)
+- [Transformation and Normality Testing of Response Variables](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L53-L95)
 
-- [Perparation of Models and ANOVA analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L124-L214)
+- [Perparation of Models and ANOVA analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L127-L215) 
 
-- [Plotting of Variables in Boxplot using Base R and GGplot](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L215-L622)
+- [Plotting of Variables in Boxplot using Base R and GGplot](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L218-L546) 
 
-- [Principal Component Analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L623-L705)
+- [Principal Component Analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L548-L610)
 
-- [Covariation of Plant Traits in Response to Climatic Factors](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/0fb34357bcc41a82daab0bfbfeaeefbbb26c4c77/Analysis%20-%2018%20September%202024.R#L700-L840)
+- [Covariation of Plant Traits in Response to Climatic Factors](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L700-L839) 
 
-- [Redundancy Analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L710-L834)
+- [Redundancy Analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L1393-L1497)
 
-- [Correlogram](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L1068-L1258)
+- [Correlogram](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L1598-L1786) 
 
-- [Correlation Networks](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L1410-L1449)
-
-- [Variance Partitioning Using Barplot](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L1453-L1773)
+- [Variance Partitioning Using Barplot](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/c284416ed97835848637dd3f67fede1588a487ac/Analysis%20-%2018%20September%202024.R#L1788-L2108)
