@@ -18,6 +18,8 @@ Next, download this [R Script](https://github.com/MurugashManavalan/Plant_Trait_
 
 - [Principal Component Analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L623-L705)
 
+- [Covariation of Plant Traits in Response to Climatic Factors](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/0fb34357bcc41a82daab0bfbfeaeefbbb26c4c77/Analysis%20-%2018%20September%202024.R#L700-L840)
+
 - [Redundancy Analysis](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L710-L834)
 
 - [Correlogram](https://github.com/MurugashManavalan/Plant_Trait_Covariation_And_Response/blob/9fd8d160e056991ee8d7d73583f57e47f05323d3/Analysis%20-%2018%20September%202024.R#L1068-L1258)
