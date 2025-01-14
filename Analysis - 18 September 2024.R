@@ -1,20 +1,22 @@
 # Installing Packages ----
-install.packages("corrplot")
-install.packages("ggrepel")
-install.packages("Hmisc")
-install.packages("VennDiagram")
-install.packages("devtools")
-install.github("vqv/ggbiplot") # Need to load devtools package before installing
-install.packages("ggeffects")
-install.packages("igraph")
-install.packages("qgraph")
-install.packages("vegan")
-library(readr) # For easier importing of datasets 
-library(lme4) # For linear models 
-library(lmerTest) # For linear models
-library(ggplot2) # For better plots
+install.packages("corrplot") # Used to visualize correlation matrices and create correlograms to identify data patterns.
+install.packages("ggrepel") #  Enhances ggplot2 by adding labels that repel each other, avoiding overlap in plots.
+install.packages("Hmisc") # Provides tools for data manipulation, descriptive statistics, and creating correlation matrices with significance tests.
+install.packages("VennDiagram") # Creates Venn diagrams to visualize intersections, unions, and unique elements among sets.
+install.packages("devtools") # Facilitates package development and installation, including GitHub-based packages.
+install.github("vqv/ggbiplot")# Extends ggplot2 to visualize PCA results through biplots for exploring variable and observation relationships.
+install_github("kassambara/factoextra") # For Grouping in PCA
+install.packages("ggeffects") # Simplifies the creation of effect plots for regression models to interpret model predictions.
+install.packages("igraph") # Focused on network analysis and visualization, allowing the creation and analysis of graph structures.
+install.packages("qgraph") # Builds visualizations for networks and integrates with igraph, often used for correlation networks and psychological studies.
+install.packages("vegan")# Provides tools for ecological data analysis, including ordination, diversity analysis, and multivariate statistics.
+install.packages("factoextra") # For Grouping in PCA
+library(readr) # Offers fast and user-friendly functions for importing datasets (e.g., CSV, TSV) into R.
+library(lme4) # Fits linear and generalized linear mixed-effects models, useful for hierarchical data or random effects.
+library(lmerTest) # Extends lme4 by adding p-values and other summaries for mixed models.
+library(ggplot2) # A fundamental package for creating customizable and advanced visualizations based on the grammar of graphics.
 library(vegan)
-library(dplyr) # For Variance Partitioning Barplot, for %>%
+library(dplyr) # A data manipulation package with easy-to-use functions and piping (%>%) for filtering and summarizing data.
 library(corrplot) # For Correlation Matrix and Corellogram
 library(igraph) # For Correlation Matrix
 library(qgraph) # For Correlation Matrix
@@ -22,15 +24,16 @@ library(qgraph)
 library(igraph)
 library(Hmisc)
 library(ggrepel)
-library(tidyr)
+library(tidyr) # Simplifies reshaping data (wide to long format) and managing missing values, often used with dplyr.
 library(ggbiplot)
 library(devtools)
 library(ggbiplot)
-library(plyr)
+library(plyr) # Provides functions to split, apply, and combine operations on datasets, though less commonly used due to dplyr.
 library(ggeffects)
-library(car) # For Variance Partitioning Barplot, for Anova
-library(reshape2) # For correlogram
+library(car) # Provides tools for regression analysis, ANOVA, and diagnostic plots, including variance partitioning.
+library(reshape2) # Offers functions for reshaping data frames, such as melting and casting, to prepare tidy datasets.
 library(vegan)
+library(factoextra)
 View(AusC)
 
 # Loading Files into R ----
@@ -223,141 +226,118 @@ plot(AusL$`Leaf Dry Matter Content (LDMC)(g/g)`~AusL$CO2, main = "CO2 on LDMC", 
 plot(AusL$`Leaf Dry Matter Content (LDMC)(g/g)`~AusL$Drought, main = "Drought on LDMC", xlab = "Drought Level", ylab = "Leaf Dry Matter Content (LDMC)(g/g)")
 
 ## Plots in Lotus (Using ggplot) ----
-### Display Area ----
-ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
-  geom_boxplot() +
-  labs(
-    title = "Lotus - Effect of Temperature on Display Area",
-    x = "Temperature Level",
-    y = "Display Area (DA)(cm2)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-
-ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
-  geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    title = "Lotus - Effect of CO2 Level on DA by Temperature",
-    x = "CO2 Level",
-    y = "Display Area (DA)(cm2)",
-    fill = "Temperature"
-  ) +
-  theme_minimal()+
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-
-ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Drought)) +
-  geom_boxplot() +
-  facet_wrap(~ Drought) +
-  labs(
-    title = "Lotus - Effect of CO2 and Temperature on DA by Drought Level",
-    x = "CO2 + Temperature Level",
-    y = "Display Area (DA)(cm2)",
-    fill = "Drought"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Specific Petal Area ----
-ggplot(AusL, aes(x = AusL$Drought, y = AusL$`Specific Petal Area (SPA)(cm2/g)`))+
-  geom_boxplot() +
-  labs(
-    title = "Lotus - Effect of Drought on Specific Petal Area",
-    x = "Drought Level",
-    y = "Specific Petal Area (SPA)(cm2/g)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Leaf Area ----
+### CO2 ----
 ggplot(AusL, aes(x = AusL$CO2, y = AusL$`Leaf Area (LA)(cm2)`))+
-  geom_boxplot() +
+  geom_boxplot(fill = "#f7766d") +
   labs(
-    title = "Lotus - Effect of CO2 on Leaf Area",
+    title = "Lotus - Effect of CO2 on LA",
     x = "CO2 Level",
     y = "Leaf Area (LA)(cm2)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-ggplot(AusL, aes(x = CO2, y = `Leaf Area (LA)(cm2)`, fill = Drought)) +
-  geom_boxplot() +
-  facet_wrap(~ Drought) +
-  labs(
-    title = "Lotus - Effect of CO2 and Temperature on LA by Drought Level",
-    x = "CO2 + Temperature Level",
-    y = "Leaf Area (LA)(cm2)",
-    fill = "Drought"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-
-### Specific Leaf Area ----
 ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
-  geom_boxplot() +
+  geom_boxplot(fill = "#f7766d") +
   labs(
-    title = "Lotus - Effect of CO2 Level on SLA",
+    title = "Lotus - Effect of CO2 on SLA",
     x = "CO2 Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
+ggplot(AusL, aes(x = CO2,y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
+  geom_boxplot(fill = "#f7766d") +
+  labs(
+    title = "Lotus - Effect of CO2 on LDMC",
+    x = "CO2 Level",
+    y = "Leaf Dry Matter Content (LDMC) (g/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
 
+### Temperature ----
+ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
+  geom_boxplot(fill = "#f7766d") +
+  labs(
+    title = "Lotus - Effect of Temperature on DA",
+    x = "Temperature Level",
+    y = "Display Area (DA)(cm2)"
+  ) +
+  theme(
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
+
+### Drought ----
 ggplot(AusL, aes(x = AusL$Drought, y= AusL$`Specific Leaf Area (SLA)(cm2/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Lotus - Effect of Drought on SLA",
     x = "Drought Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
+
+ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
+  geom_boxplot(fill = "#f7766d")+
+  labs(
+    title = "Lotus - Effect of Drought on LDMC",
+    x = "Drought Level",
+    y = "Leaf Dry Matter Content (LDMC) (g/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
+
+### Interactions ----
+
+ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
+  geom_boxplot() +
+  facet_wrap(~ Temperature) +
+  labs(
+    title = "Lotus - Effect of CO2 and Temperature on DA",
+    x = "CO2 Level",
+    y = "Display Area (DA)(cm2)",
+    fill = "Temperature"
+  ) +
+  theme(
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
 
 
@@ -365,69 +345,75 @@ ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperat
   geom_boxplot() +
   facet_wrap(~ Temperature) +
   labs(
-    title = "Lotus - Effect of CO2 Level on SLA by Temperature Level",
+    title = "Lotus - Effect of CO2 and Temperature on SLA",
     x = "CO2 Level",
     y = "Specific Leaf Area (SLA) (cm2/g)",
     fill = "Temperature"
   ) +
-  theme_minimal() +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
-
-
-### Leaf Dry Matter Content ----
-
-ggplot(AusL, aes(x = CO2,y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
+ggplot(AusL, aes(x = CO2, y = AusL$`Display Area (DA)(cm2)`, fill = Drought)) +
   geom_boxplot() +
+  facet_wrap(~ Drought) +
   labs(
-    title = "Lotus - Effect of CO2 Level on LDMC",
-    x = "CO2 Level",
-    y = "Leaf Dry Matter Content (LDMC) (g/g)"
+    title = "Lotus - Effect of Combined Interaction on DA",
+    x = "CO2 + Temperature Level",
+    y = "Display Area (DA)(cm2)",
+    fill = "Drought"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
 
-ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
-  geom_boxplot()+
+ggplot(AusL, aes(x = CO2, y = AusL$`Leaf Area (LA)(cm2)`, fill = Drought)) +
+  geom_boxplot() +
+  facet_wrap(~ Drought) +
   labs(
-    title = "Lotus - Effect of Drought on LDMC",
-    x = "Drought Level",
-    y = "Leaf Dry Matter Content (LDMC) (g/g)"
+    title = "Lotus - Effect of Combined Interaction on LA",
+    x = "CO2 + Temperature Level",
+    y = "Leaf Area (LA)(cm2)",
+    fill = "Drought"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
 
 ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
   geom_boxplot() +
   facet_wrap(~ Drought) +
   labs(
-    title = "Lotus - Effect of CO2 and Temperature on LDMC by Drought",
+    title = "Lotus - Effect of Combined Interaction on LDMC",
     x = "CO2 + Temperature Level",
     y = "Leaf Dry Matter Content (LDMC)(g/g)",
     fill = "Drought"
   ) +
-  theme_minimal() +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
 
 anova(lv_LAmodel)
@@ -443,192 +429,135 @@ plot(AusC$`Number of Seeds (SN)`~AusC$Drought, main = "Drought on No. of Seeds",
 ## Plots in Crepis (Using ggplot) ----
 View(AusC)
 
-### Display Area ----
+### Drought ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on DA",
     x = "Drought Level",
     y = "Display Area (DA)(cm2)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-### Specific Petal Area ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Specific Petal Area (SPA)(cm2/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on SPA",
     x = "Drought Level",
     y = "Specific Petal Area (SPA)(cm2/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
-  geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    title = "Crepis - Effect of CO2 Level on SPA by Temperature",
-    x = "CO2 Level",
-    y = "Specific Petal Area (SPA)(cm2/g)",
-    fill = "Temperature"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Petal Dry Matter Content ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Petal Dry Matter Content (PDMC)(g/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on PDMC",
     x = "Drought Level",
     y = "Petal Dry Matter Content (PDMC)(g/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-ggplot(AusC, aes(x = CO2, y = `Petal Dry Matter Content (PDMC)(g/g)`, fill = Temperature)) +
-  geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    title = "Crepis - Effect of CO2 Level on PDMC by Temperature",
-    x = "CO2 Level",
-    y = "Petal Dry Matter Content (PDMC)(g/g)",
-    fill = "Temperature"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-View(AusL)
-### Leaf Area ----
-ggplot(AusC, aes(x = AusC$Temperature, y= `Leaf Area (LA)(cm2)`)) +
-  geom_boxplot()+
-  labs(
-    title = "Crepis - Effect of Temperature on LA",
-    x = "Temperature Level",
-    y = "Leaf Area (LA)(cm2)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Leaf Dry Matter Content ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on LDMC",
     x = "Drought Level",
     y = "Leaf Dry Matter Content (g/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   ) 
 
-### Seed Number ----
-ggplot(AusC, aes(x = AusC$Temperature, y= `Number of Seeds (SN)`)) +
-  geom_boxplot()+
-  labs(
-    title = "Crepis - Effect of Temperature on SN",
-    x = "Temperature Level",
-    y = "Number of Seeds (SN)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
 ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on SN",
     x = "Drought Level",
     y = "Number of Seeds (SN)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
+### Interactions ----
+
+ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
+  geom_boxplot() +
+  facet_wrap(~ Temperature) +
+  labs(
+    title = "Crepis - Effect of CO2 and Temperature on SPA",
+    x = "CO2 Level",
+    y = "Specific Petal Area (SPA)(cm2/g)",
+    fill = "Temperature"
+  ) +
+  theme(
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
+  )
 
 ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
   geom_boxplot() +
   facet_wrap(~ Temperature) +
   labs(
-    title = "Crepis - Effect of CO2 on SN by Temperature",
+    title = "Crepis - Effect of CO2 and Temperature on SN",
     x = "CO2 Level",
     y = "Number of Seeds (SN)",
     fill = "Temperature"
   ) +
-  theme_minimal() +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
-
-## Plotting Using GGpredict ----
-ggpredict(c_sq_DAmodel)
-pr=ggpredict(c_sq_DAmodel, terms = c("Drought", "Temperature"), type = "fixed")
-pr
-plot(pr, dodge = 1, , colors = c("red", "blue" ), ci_style = "errorbar")+
-  labs(title = NULL,
-       x = "Drought",
-       y = "DA")
-?plot.ggeffects
 
 # Principal Component Analysis ----
 ## Creation of PCA models ----
 View(AusPC)
+colnames(AusPC)
 lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
 cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
+cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale =  TRUE)
+
 lcav <- prcomp(AusPC[,c(16, 18,19,20)], center = TRUE, scale = TRUE)
 names(AusPC)
 
 colnames(AusPC)
+View(AusPC)
 ## Plotting of PCA models ---- 
 names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
@@ -639,7 +568,7 @@ names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "SM"
 names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
-biplot(lmv, scale = 0)
+biplot(lmv)
 biplot(cmv, scale = 1, alpha = 0)
 biplot(lcav, scale = 0)
 scores(lmv, display = "species")
@@ -647,29 +576,267 @@ scores(lmv, display = "species")
 lmv_scores <- lmv$x
 lmv_scores[,3]
 summary(lmv)
+summary(cmv)
+summary(cav)
 lmv
+
 ### PCA plots using ggbiplot ----
 
-ggbiplot(lmv, alpha = 0, varname.size = 5) +
+ggbiplot(lmv, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (35.4%)", y = "PC2 (29.1%)")
+  labs(x = "PC1 (32.7%)", y = "PC2 (28.3%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+  )
 
-ggbiplot(cmv, alpha = 0, varname.size = 5) + 
+ggbiplot(cmv, varname.size = 6 ,alpha = 0) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (33.6%)", y = "PC2 (21.6%)")
+  labs(x = "PC1 (33.6%)", y = "PC2 (21.6%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+  )
 
-## Extracting PC Scores ----
-summary(cmv)
-lcav$x
-AusPC1 <- cbind(AusPC, lcav$x[,1:4])
-View(AusPC1)
-View(AusC)
-## Plotting with GG plot ----
-ggplot(AusPC, aes(PC1,PC2, colour = Species, fill = Species)) +
-  stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) +
-  geom_point(shape = 21, col = "black")
+ggbiplot(cav, varname.size = 6 ,alpha = 0) + 
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(x = "PC1 (28%)", y = "PC2 (18.6%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+  )
+
+
+## Grouping based on Climatic Variables ----
+## Using Ordispider Package ----
+### For Lotus ----
+l_pca_scores <- as.data.frame(lmv$x)   # Extract PCA individual scores
+l_groups <- AusPC$Treatment[AusPC$Species == "Lotus"]  # Grouping variable
+
+# Define a consistent color palette for the polygons
+unique_groups <- unique(l_groups)
+group_colors <- setNames(rainbow(length(unique_groups)), unique_groups)
+
+# Base plot
+plot(l_pca_scores$PC1, l_pca_scores$PC2, 
+     xlab = "PC1 (32.7%)", ylab = "PC2 (28.3%)", main = "Lotus - PCA",
+     col = group_colors[l_groups], pch = 19, cex = 1.5)
+
+# Add spider diagram (ordihull polygons)
+ordispider(l_pca_scores, l_groups, col = rainbow(length(unique(l_groups))), label = TRUE)
+ordihull(l_pca_scores, l_groups, col = group_colors, draw = "polygon", alpha = 0.4)
+
+# Add legend matching polygon colors
+legend("topright",
+       legend = unique_groups,
+       fill = group_colors,
+       border = "black",
+       title = "Treatment Groups")
+
+# Adding arrows
+l_pca_loadings <- as.data.frame(lmv$rotation[, 1:2])  
+arrows(0, 0, 
+       l_pca_loadings$PC1 * 2,  
+       l_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(l_pca_loadings$PC1 * 2.2, l_pca_loadings$PC2 * 2.2, labels = rownames(l_pca_loadings), col = "blue", cex = 0.8)
+
+### For Crepis (Main Variables) ----
+cm_pca_scores <- as.data.frame(cmv$x)
+c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
+
+#Base plot
+plot(cm_pca_scores$PC1, cm_pca_scores$PC2,
+     xlab = "PC1 (33.6%)", ylab = "PC2 (21.6%)", main = "Crepis - Main Variables - PCA",
+     col=as.factor(c_groups), pch = 19, cex = 1.5)
+
+# Add spider diagram
+ordispider(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
+ordihull(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
+
+# Optional: Add legend
+legend("topright", legend = unique(c_groups), 
+       col = rainbow(length(unique(c_groups))), 
+       pch = 19, bty = "o")
+
+# Adding arrows
+cm_pca_loadings <- as.data.frame(cmv$rotation[, 1:2])  
+arrows(0, 0, 
+       cm_pca_loadings$PC1 * 2,  
+       cm_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(cm_pca_loadings$PC1 * 2.2, cm_pca_loadings$PC2 * 2.2, labels = rownames(cm_pca_loadings), col = "blue", cex = 0.8)
+
+### For Crepis (All Variables) ----
+ca_pca_scores <- as.data.frame(cav$x)
+c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
+
+#Base plot
+plot(ca_pca_scores$PC1, ca_pca_scores$PC2,
+     xlab = "PC1 (28%)", ylab = "PC2 (18.6%)", main = "Crepis - All Variables - PCA",
+     col=as.factor(c_groups), pch = 19, cex = 1.5)
+
+# Add spider diagram
+ordispider(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
+ordihull(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
+
+# Optional: Add legend
+legend("topright", legend = unique(c_groups), 
+       col = rainbow(length(unique(c_groups))),
+       border = "black",
+       pch = 19, bty = "o", title = "Treatment Groups")
+
+# Adding arrows
+ca_pca_loadings <- as.data.frame(cav$rotation[, 1:2])  
+arrows(0, 0, 
+       ca_pca_loadings$PC1 * 2,  
+       ca_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(ca_pca_loadings$PC1 * 2.2, ca_pca_loadings$PC2 * 2.2, labels = rownames(ca_pca_loadings), col = "blue", cex = 0.8)
+
+## Rank Abundance Curves ----
+### Creating PCA for each treatment ----
+### Lotus ----
+lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
+lmv_control <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
+lmv_drought <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
+lmv_temperature <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
+lmv_co2 <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
+lmv_ct <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
+lmv_ctd <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
+lmv_ctd
+lmv_control
+### Extracting Variance Explained for each treatment
+variance_lmv_control <- lmv_control$sdev^2 / sum(lmv_control$sdev^2)
+variance_lmv_drought <- lmv_drought$sdev^2 / sum(lmv_drought$sdev^2)
+variance_lmv_temperature <- lmv_temperature$sdev^2 / sum(lmv_temperature$sdev^2)
+variance_lmv_co2 <- lmv_co2$sdev^2 / sum(lmv_co2$sdev^2)
+variance_lmv_ct <- lmv_ct$sdev^2 / sum(lmv_ct$sdev^2)
+variance_lmv_ctd <- lmv_ctd$sdev^2 / sum(lmv_ctd$sdev^2)
+
+### Combining Variance Explained Results to a dataframe
+AusL_PC <- data.frame(
+  PCA_axis = rep(1:6,6),
+  Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
+  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
+)
+
+### Adding zero to treatments with insufficient PCA Axis 
+if (length(variance_lmv_drought) < 6) {
+  variance_lmv_drought <- c(variance_lmv_drought, rep(0, 6 - length(variance_lmv_drought)))
+}
+if (length(variance_lmv_ct) < 6) {
+  variance_lmv_ct <- c(variance_lmv_ct, rep(0, 6 - length(variance_lmv_ct)))
+}
+
+ggplot(AusL_PC, aes(x = AusL_PC$PCA_axis, y = AusL_PC$Variance_Explained, color = AusL_PC$Treatment)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Lotus - Effect of Climatic Factors on Trait Covariation",
+    x = "PCA Axis",
+    y = "Proportion of Variance Explained",
+    color = "Treatment"
+  ) +
+  theme_minimal()
+
+View(AusL_PC)
+
+### Crepis (Main Variables) ----
+cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
+cmv_control <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
+cmv_drought <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
+cmv_temperature <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
+cmv_co2 <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
+cmv_ct <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
+cmv_ctd <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
+
+### Extracting variance explained for each treatment 
+variance_cmv_control <- cmv_control$sdev^2 / sum(cmv_control$sdev^2)
+variance_cmv_drought <- cmv_drought$sdev^2 / sum(cmv_drought$sdev^2)
+variance_cmv_temperature <- cmv_temperature$sdev^2 / sum(cmv_temperature$sdev^2)
+variance_cmv_co2 <- cmv_co2$sdev^2 / sum(cmv_co2$sdev^2)
+variance_cmv_ct <- cmv_ct$sdev^2 / sum(cmv_ct$sdev^2)
+variance_cmv_ctd <- cmv_ctd$sdev^2 / sum(cmv_ctd$sdev^2)
+
+lengths <- sapply(list(variance_cmv_control, variance_cmv_co2, variance_cmv_temperature, variance_cmv_drought, variance_cmv_ct, variance_cmv_ctd), length)
+print(lengths)
+
+### Combining variance explained results to a dataframe
+
+AusCM_PC <- data.frame(
+  PCA_axis = rep(1:6, 6),
+  Variance_Explained = c(variance_cmv_control, variance_cmv_co2, variance_cmv_temperature, variance_cmv_drought, variance_cmv_ct, variance_cmv_ctd),
+  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
+)
+
+ggplot(AusCM_PC, aes(x = AusCM_PC$PCA_axis, y = AusCM_PC$Variance_Explained, color = AusCM_PC$Treatment)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Crepis (Main Variables) - Effect of Climatic Factors on Trait Covariation",
+    x = "PCA Axis",
+    y = "Proportion of Variance Explained",
+    color = "Treatment"
+  ) +
+  theme_minimal()
+
+### Crepis (All Variables) ----
+cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
+
+cav_control <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D0", c(9,18,20:25)], scale = TRUE)
+cav_drought <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D1", c(9,18,20:25)], scale = TRUE)
+cav_temperature <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T2D0", c(9,18,20:25)], scale = TRUE)
+cav_co2 <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T0D0", c(9,18,20:25)], scale = TRUE)
+cav_ct <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D0", c(9,18,20:25)], scale = TRUE)
+cav_ctd <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D1", c(9,18,20:25)], scale = TRUE)
+
+### Extracting variance explained for each treatment 
+variance_cav_control <- cav_control$sdev^2 / sum(cav_control$sdev^2)
+variance_cav_drought <- cav_drought$sdev^2 / sum(cav_drought$sdev^2)
+variance_cav_temperature <- cav_temperature$sdev^2 / sum(cav_temperature$sdev^2)
+variance_cav_co2 <- cav_co2$sdev^2 / sum(cav_co2$sdev^2)
+variance_cav_ct <- cav_ct$sdev^2 / sum(cav_ct$sdev^2)
+variance_cav_ctd <- cav_ctd$sdev^2 / sum(cav_ctd$sdev^2)
+
+### Checking the lengths of variance vectors
+lengths <- sapply(list(variance_cav_control, variance_cav_co2, variance_cav_temperature, variance_cav_drought, variance_cav_ct, variance_cav_ctd), length)
+print(lengths)
+
+### Adding zero to treatments with insufficient PCA Axis 
+if (length(variance_cav_co2) < 8) {
+  variance_cav_co2 <- c(variance_cav_co2, rep(0, 8 - length(variance_cav_co2)))
+}
+
+if (length(variance_cav_ct) < 8) {
+  variance_cav_ct <- c(variance_cav_ct, rep(0, 8 - length(variance_cav_ct)))
+}
+
+if (length(variance_cav_ctd) < 8) {
+  variance_cav_ctd <- c(variance_cav_ctd, rep(0, 8 - length(variance_cav_ctd)))
+}
+
+### Combining variance explained results to a dataframe
+
+AusCA_PC <- data.frame(
+  PCA_axis = rep(1:8, 6),
+  Variance_Explained = c(variance_cav_control, variance_cav_co2, variance_cav_temperature, variance_cav_drought, variance_cav_ct, variance_cav_ctd),
+  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 8)
+)
+
+ggplot(AusCA_PC, aes(x = AusCA_PC$PCA_axis, y = AusCA_PC$Variance_Explained, color = AusCA_PC$Treatment)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Crepis (All Variables) - Effect of Climatic Factors on Trait Covariation",
+    x = "PCA Axis",
+    y = "Proportion of Variance Explained",
+    color = "Treatment"
+  ) +
+  theme_minimal()
 
 ## Extracting PCA Results----
 ### For Lotus ----
@@ -678,34 +845,550 @@ lotus_pca_trait_loadings <- lmv$rotation*lmv$sdev
 lotus_pca_eigenvalues <- lmv$sdev^2
 lotus_pca_variance <- lotus_pca_eigenvalues/sum(lotus_pca_eigenvalues)
 lotus_pca_cum_variance <- cumsum(lotus_pca_variance)
-lotus_pca_trait_loadings
-lotus_pca_cum_variance
-summary(cmv)
 
-write.csv(lotus_pca_trait_loadings, "lotus_pca_trait_loadings.csv", row.names = FALSE)
-write.csv(lotus_pca_eigenvalues, "lotus_pca_eigenvalues.csv", row.names = FALSE)
-write.csv(lotus_pca_variance, "lotus_pca_variance.csv")
-write.csv(lotus_pca_cum_variance, "lotus_pca_cum_variance.csv")
+trait_loadings_df <- as.data.frame(lotus_pca_trait_loadings)
+variance_percent <- lotus_pca_variance * 100
+cumulative_variance_percent <- lotus_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = lotus_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "lotus_pca_combined.csv", row.names = TRUE)
 
-### For Crepis ----
-cmv
-crepis_pca_trait_loadings <- cmv$rotation*cmv$sdev
-crepis_pca_eigenvalues <- cmv$sdev^2
-crepis_pca_variance <- crepis_pca_eigenvalues/sum(crepis_pca_eigenvalues)
-crepis_pca_cum_variance <- cumsum(crepis_pca_variance)
-crepis_pca_trait_loadings
-crepis_pca_cum_variance
+### For Treatments
+#### Control
+lotus_control_pca_trait_loadings <- lmv_control$rotation
+lotus_control_pca_eigenvalues <- lmv_control$sdev^2
+lotus_control_pca_variance <- lotus_control_pca_eigenvalues / sum(lotus_control_pca_eigenvalues)
+lotus_control_pca_cum_variance <- cumsum(lotus_control_pca_variance)
 
-write.csv(crepis_pca_trait_loadings, "crepis_pca_trait_loadings.csv", row.names = FALSE)
-write.csv(crepis_pca_eigenvalues, "crepis_pca_eigenvalues.csv", row.names = FALSE)
-write.csv(crepis_pca_variance, "crepis_pca_variance.csv")
-write.csv(crepis_pca_cum_variance, "crepis_pca_cum_variance.csv")
+trait_loadings_df <- as.data.frame(lotus_control_pca_trait_loadings)
+variance_percent <- lotus_control_pca_variance * 100
+cumulative_variance_percent <- lotus_control_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = lotus_control_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "lotus_control_pca_combined.csv", row.names = TRUE)
+
+#### CO2
+lotus_co2_pca_trait_loadings <- lmv_co2$rotation
+lotus_co2_pca_eigenvalues <- lmv_co2$sdev^2
+lotus_co2_pca_variance <- lotus_co2_pca_eigenvalues / sum(lotus_co2_pca_eigenvalues)
+lotus_co2_pca_cum_variance <- cumsum(lotus_co2_pca_variance)
+
+trait_loadings_df <- as.data.frame(lotus_co2_pca_trait_loadings)
+variance_percent <- lotus_co2_pca_variance * 100
+cumulative_variance_percent <- lotus_co2_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = lotus_co2_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "lotus_co2_pca_combined.csv", row.names = TRUE)
+
+#### Temperature
+lotus_temperature_pca_trait_loadings <- lmv_temperature$rotation
+lotus_temperature_pca_eigenvalues <- lmv_temperature$sdev^2
+lotus_temperature_pca_variance <- lotus_temperature_pca_eigenvalues / sum(lotus_temperature_pca_eigenvalues)
+lotus_temperature_pca_cum_variance <- cumsum(lotus_temperature_pca_variance)
+
+trait_loadings_df <- as.data.frame(lotus_temperature_pca_trait_loadings)
+variance_percent <- lotus_temperature_pca_variance * 100
+cumulative_variance_percent <- lotus_temperature_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = lotus_temperature_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "lotus_temperature_pca_combined.csv", row.names = TRUE)
+
+#### Drought
+lotus_drought_pca_trait_loadings <- lmv_drought$rotation
+lotus_drought_pca_eigenvalues <- lmv_drought$sdev^2
+lotus_drought_pca_variance <- lotus_drought_pca_eigenvalues / sum(lotus_drought_pca_eigenvalues)
+lotus_drought_pca_cum_variance <- cumsum(lotus_drought_pca_variance)
+
+trait_loadings_df <- as.data.frame(lotus_drought_pca_trait_loadings)
+variance_percent <- lotus_drought_pca_variance * 100
+cumulative_variance_percent <- lotus_drought_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = lotus_drought_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "lotus_drought_pca_combined.csv", row.names = TRUE)
+
+#### CO2 and Temperature
+lotus_ct_pca_trait_loadings <- lmv_ct$rotation
+lotus_ct_pca_eigenvalues <- lmv_ct$sdev^2
+lotus_ct_pca_variance <- lotus_ct_pca_eigenvalues / sum(lotus_ct_pca_eigenvalues)
+lotus_ct_pca_cum_variance <- cumsum(lotus_ct_pca_variance)
+
+trait_loadings_df <- as.data.frame(lotus_ct_pca_trait_loadings)
+variance_percent <- lotus_ct_pca_variance * 100
+cumulative_variance_percent <- lotus_ct_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = lotus_ct_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "lotus_ct_pca_combined.csv", row.names = TRUE)
+
+#### Combined Interaction
+lotus_ctd_pca_trait_loadings <- lmv_ctd$rotation
+lotus_ctd_pca_eigenvalues <- lmv_ctd$sdev^2
+lotus_ctd_pca_variance <- lotus_ctd_pca_eigenvalues / sum(lotus_ctd_pca_eigenvalues)
+lotus_ctd_pca_cum_variance <- cumsum(lotus_ctd_pca_variance)
+
+trait_loadings_df <- as.data.frame(lotus_ctd_pca_trait_loadings)
+variance_percent <- lotus_ctd_pca_variance * 100
+cumulative_variance_percent <- lotus_ctd_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = lotus_ctd_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "lotus_ctd_pca_combined.csv", row.names = TRUE)
+
+
+### For Crepis (Main Variables) ----
+
+crepis_m_pca_trait_loadings <- cmv$rotation * cmv$sdev
+crepis_m_pca_eigenvalues <- cmv$sdev^2
+crepis_m_pca_variance <- crepis_m_pca_eigenvalues / sum(crepis_m_pca_eigenvalues)
+crepis_m_pca_cum_variance <- cumsum(crepis_m_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_m_pca_trait_loadings)
+variance_percent <- crepis_m_pca_variance * 100
+cumulative_variance_percent <- crepis_m_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_m_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_m_pca_combined.csv", row.names = TRUE)
+
+### For Treatments
+#### Control
+crepis_m_control_pca_trait_loadings <- cmv_control$rotation
+crepis_m_control_pca_eigenvalues <- cmv_control$sdev^2
+crepis_m_control_pca_variance <- crepis_m_control_pca_eigenvalues / sum(crepis_m_control_pca_eigenvalues)
+crepis_m_control_pca_cum_variance <- cumsum(crepis_m_control_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_m_control_pca_trait_loadings)
+variance_percent <- crepis_m_control_pca_variance * 100
+cumulative_variance_percent <- crepis_m_control_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_m_control_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_m_control_pca_combined.csv", row.names = TRUE)
+
+#### CO2
+crepis_m_co2_pca_trait_loadings <- cmv_co2$rotation
+crepis_m_co2_pca_eigenvalues <- cmv_co2$sdev^2
+crepis_m_co2_pca_variance <- crepis_m_co2_pca_eigenvalues / sum(crepis_m_co2_pca_eigenvalues)
+crepis_m_co2_pca_cum_variance <- cumsum(crepis_m_co2_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_m_co2_pca_trait_loadings)
+variance_percent <- crepis_m_co2_pca_variance * 100
+cumulative_variance_percent <- crepis_m_co2_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_m_co2_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_m_co2_pca_combined.csv", row.names = TRUE)
+
+#### Temperature
+crepis_m_temperature_pca_trait_loadings <- cmv_temperature$rotation
+crepis_m_temperature_pca_eigenvalues <- cmv_temperature$sdev^2
+crepis_m_temperature_pca_variance <- crepis_m_temperature_pca_eigenvalues / sum(crepis_m_temperature_pca_eigenvalues)
+crepis_m_temperature_pca_cum_variance <- cumsum(crepis_m_temperature_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_m_temperature_pca_trait_loadings)
+variance_percent <- crepis_m_temperature_pca_variance * 100
+cumulative_variance_percent <- crepis_m_temperature_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_m_temperature_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_m_temperature_pca_combined.csv", row.names = TRUE)
+
+#### Drought
+crepis_m_drought_pca_trait_loadings <- cmv_drought$rotation
+crepis_m_drought_pca_eigenvalues <- cmv_drought$sdev^2
+crepis_m_drought_pca_variance <- crepis_m_drought_pca_eigenvalues / sum(crepis_m_drought_pca_eigenvalues)
+crepis_m_drought_pca_cum_variance <- cumsum(crepis_m_drought_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_m_drought_pca_trait_loadings)
+variance_percent <- crepis_m_drought_pca_variance * 100
+cumulative_variance_percent <- crepis_m_drought_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_m_drought_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_m_drought_pca_combined.csv", row.names = TRUE)
+
+#### CO2 and Temperature
+crepis_m_ct_pca_trait_loadings <- cmv_ct$rotation
+crepis_m_ct_pca_eigenvalues <- cmv_ct$sdev^2
+crepis_m_ct_pca_variance <- crepis_m_ct_pca_eigenvalues / sum(crepis_m_ct_pca_eigenvalues)
+crepis_m_ct_pca_cum_variance <- cumsum(crepis_m_ct_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_m_ct_pca_trait_loadings)
+variance_percent <- crepis_m_ct_pca_variance * 100
+cumulative_variance_percent <- crepis_m_ct_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_m_ct_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_m_ct_pca_combined.csv", row.names = TRUE)
+
+#### Combined Interaction
+crepis_m_ctd_pca_trait_loadings <- cmv_ctd$rotation
+crepis_m_ctd_pca_eigenvalues <- cmv_ctd$sdev^2
+crepis_m_ctd_pca_variance <- crepis_m_ctd_pca_eigenvalues / sum(crepis_m_ctd_pca_eigenvalues)
+crepis_m_ctd_pca_cum_variance <- cumsum(crepis_m_ctd_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_m_ctd_pca_trait_loadings)
+variance_percent <- crepis_m_ctd_pca_variance * 100
+cumulative_variance_percent <- crepis_m_ctd_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_m_ctd_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_m_ctd_pca_combined.csv", row.names = TRUE)
+
+### For Crepis (All Variables) ----
+
+crepis_a_pca_trait_loadings <- cav$rotation * cav$sdev
+crepis_a_pca_eigenvalues <- cav$sdev^2
+crepis_a_pca_variance <- crepis_a_pca_eigenvalues / sum(crepis_a_pca_eigenvalues)
+crepis_a_pca_cum_variance <- cumsum(crepis_a_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_a_pca_trait_loadings)
+variance_percent <- crepis_a_pca_variance * 100
+cumulative_variance_percent <- crepis_a_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_a_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_a_pca_combined.csv", row.names = TRUE)
+
+### For Treatments
+#### Control
+crepis_a_control_pca_trait_loadings <- cav_control$rotation
+crepis_a_control_pca_eigenvalues <- cav_control$sdev^2
+crepis_a_control_pca_variance <- crepis_a_control_pca_eigenvalues / sum(crepis_a_control_pca_eigenvalues)
+crepis_a_control_pca_cum_variance <- cumsum(crepis_a_control_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_a_control_pca_trait_loadings)
+variance_percent <- crepis_a_control_pca_variance * 100
+cumulative_variance_percent <- crepis_a_control_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_a_control_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_a_control_pca_combined.csv", row.names = TRUE)
+
+#### CO2
+crepis_a_co2_pca_trait_loadings <- cav_co2$rotation
+crepis_a_co2_pca_eigenvalues <- cav_co2$sdev^2
+crepis_a_co2_pca_variance <- crepis_a_co2_pca_eigenvalues / sum(crepis_a_co2_pca_eigenvalues)
+crepis_a_co2_pca_cum_variance <- cumsum(crepis_a_co2_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_a_co2_pca_trait_loadings)
+variance_percent <- crepis_a_co2_pca_variance * 100
+cumulative_variance_percent <- crepis_a_co2_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_a_co2_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_a_co2_pca_combined.csv", row.names = TRUE)
+
+#### Temperature
+crepis_a_temperature_pca_trait_loadings <- cav_temperature$rotation
+crepis_a_temperature_pca_eigenvalues <- cav_temperature$sdev^2
+crepis_a_temperature_pca_variance <- crepis_a_temperature_pca_eigenvalues / sum(crepis_a_temperature_pca_eigenvalues)
+crepis_a_temperature_pca_cum_variance <- cumsum(crepis_a_temperature_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_a_temperature_pca_trait_loadings)
+variance_percent <- crepis_a_temperature_pca_variance * 100
+cumulative_variance_percent <- crepis_a_temperature_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_a_temperature_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_a_temperature_pca_combined.csv", row.names = TRUE)
+
+#### Drought
+crepis_a_drought_pca_trait_loadings <- cav_drought$rotation
+crepis_a_drought_pca_eigenvalues <- cav_drought$sdev^2
+crepis_a_drought_pca_variance <- crepis_a_drought_pca_eigenvalues / sum(crepis_a_drought_pca_eigenvalues)
+crepis_a_drought_pca_cum_variance <- cumsum(crepis_a_drought_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_a_drought_pca_trait_loadings)
+variance_percent <- crepis_a_drought_pca_variance * 100
+cumulative_variance_percent <- crepis_a_drought_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_a_drought_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_a_drought_pca_combined.csv", row.names = TRUE)
+
+#### CO2 and Temperature
+crepis_a_ct_pca_trait_loadings <- cav_ct$rotation
+crepis_a_ct_pca_eigenvalues <- cav_ct$sdev^2
+crepis_a_ct_pca_variance <- crepis_a_ct_pca_eigenvalues / sum(crepis_a_ct_pca_eigenvalues)
+crepis_a_ct_pca_cum_variance <- cumsum(crepis_a_ct_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_a_ct_pca_trait_loadings)
+variance_percent <- crepis_a_ct_pca_variance * 100
+cumulative_variance_percent <- crepis_a_ct_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_a_ct_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_a_ct_pca_combined.csv", row.names = TRUE)
+
+#### Combined Interaction
+crepis_a_ctd_pca_trait_loadings <- cav_ctd$rotation
+crepis_a_ctd_pca_eigenvalues <- cav_ctd$sdev^2
+crepis_a_ctd_pca_variance <- crepis_a_ctd_pca_eigenvalues / sum(crepis_a_ctd_pca_eigenvalues)
+crepis_a_ctd_pca_cum_variance <- cumsum(crepis_a_ctd_pca_variance)
+
+trait_loadings_df <- as.data.frame(crepis_a_ctd_pca_trait_loadings)
+variance_percent <- crepis_a_ctd_pca_variance * 100
+cumulative_variance_percent <- crepis_a_ctd_pca_cum_variance * 100
+combined_df <- rbind(
+  trait_loadings_df,
+  Eigenvalues = crepis_a_ctd_pca_eigenvalues,
+  Variance_Percent = variance_percent,
+  Cumulative_Variance_Percent = cumulative_variance_percent
+)
+write.csv(combined_df, "crepis_a_ctd_pca_combined.csv", row.names = TRUE)
 
 
 
-# Proportion of variance explained
-proportion_variance_explained <- eigenvalues / sum(eigenvalues)
-proportion_variance_explained
+## PCA Plots for Each Treatment ----
+### For Lotus ----
+
+ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T0D0", x = "PC1 (42.4%)", y = "PC2 (22.8%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
+  )
+
+ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T0D0", x = "PC1 (45.4%)", y = "PC2 (31.8%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
+  )
+
+ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T2D0", x = "PC1 (44.2%)", y = "PC2 (29.7%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T0D1", x = "PC1 (39.5%)", y = "PC2 (34.9%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T2D0", x = "PC1 (44.2%)", y = "PC2 (31.2%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T2D1", x = "PC1 (66.8%)", y = "PC2 (24.7%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+### For Crepis (Main Variables) ----
+ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T0D0", x = "PC1 (32.1%)", y = "PC2 (30.6%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
+  )
+
+ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T0D0", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
+  )
+
+ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T2D0", x = "PC1 (35.5%)", y = "PC2 (27.8%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T0D1", x = "PC1 (42.7%)", y = "PC2 (25.3%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T2D0", x = "PC1 (69.7%)", y = "PC2 (15.7%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T2D1", x = "PC1 (49.2%)", y = "PC2 (28.7%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+### For Crepis (All Variables) ----
+ggbiplot(cav_control, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T0D0", x = "PC1 (33.4%)", y = "PC2 (23.8%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
+  )
+
+ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T0D0", x = "PC1 (52.0%)", y = "PC2 (36.4%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
+  )
+
+ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T2D0", x = "PC1 (31.5%)", y = "PC2 (30.3%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C0T0D1", x = "PC1 (41.6%)", y = "PC2 (27.6%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T2D0", x = "PC1 (53.9%)", y = "PC2 (20.6%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+
+ggbiplot(cav_ctd, varname.size = 6, alpha = 0) +
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(title = "C2T2D1", x = "PC1 (42.9%)", y = "PC2 (24.3%)") +
+  theme(
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
 
 # Redundancy Analysis ----
 ### Sub-setting Data frames for Lotus and Crepis ----
@@ -719,18 +1402,18 @@ crepis_rows <- AusRD[AusRD$Species == "Crepis",]
 crepis_rows <- crepis_rows[-c(46:78),]
 AusRDC <- crepis_rows[,-c(10:17)]
 ## Redundancy Analysis for Lotus ----
-names(AusRDL)[names(AusRDL) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
-names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
-names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
-names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
-names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
-names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
+names(AusRDL)[names(AusRDL) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
+names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
+names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
+names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
+names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "F-DA"
+names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "L-LA"
 names(AusRDL)[names(AusRDL) == "CO2"] <- "C"
 names(AusRDL)[names(AusRDL) == "Temperature"] <- "T"
 names(AusRDL)[names(AusRDL) == "Drought"] <- "D"
 
 
-rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2*Temperature*Drought, data = AusRDL, scale = TRUE)
+rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ C*T*D, data = AusRDL, scale = TRUE)
 Lotus_RDA <- anova.cca(rda.l, permutations = 9999, by = "terms")
 Lotus_RDA <- as.data.frame(Lotus_RDA)
 View(Lotus_RDA) # CO2, Temperature, Drought and CO2:Drought are significant
@@ -747,10 +1430,11 @@ l_rda_proportion_explained
 summary(rda.ln)
 
 # Changing Name of Interaction ----
-bp_scores <- scores(rda.ln, display = "bp")
 
+bp_scores <- scores(rda.ln, display = "bp")
+rownames(bp_scores)
 # Rename the fourth row
-rownames(bp_scores)[4] <- "(CT):D"
+rownames(bp_scores)[4] <- "(C+T)xD"
 
 # View the updated biplot scores
 rownames(bp_scores)
@@ -772,14 +1456,14 @@ arrows(0, 0, scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[
 text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(bp_scores), col = 'red', pos = 3, cex = 1)
 
 ## Redundancy Analysis for Crepis ----
-names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
-names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
-names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
-names(AusRDC)[names(AusRDC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
-names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "DA"
-names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "LA"
-names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "SN"
-names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "SM"
+names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
+names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
+names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
+names(AusRDC)[names(AusRDC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
+names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "F-DA"
+names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "L-LA"
+names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "S-SN"
+names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "S-SM"
 names(AusRDC)[names(AusRDC) == "CO2"] <- "C"
 names(AusRDC)[names(AusRDC) == "Temperature"] <- "T"
 names(AusRDC)[names(AusRDC) == "Drought"] <- "D"
@@ -909,160 +1593,6 @@ anova_to_csv(c_log_SLAmodel, anova_output_csv)
 anova_to_csv(c_sq_LDMCmodel, anova_output_csv)
 anova_to_csv(sq_SNmodel, anova_output_csv)
 anova_to_csv(log_SMmodel, anova_output_csv)
-
-
-
-# Pearson Correlation ----
-## Lotus ----
-cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
-cor.test(AusL$`Petal Mass per Area (PMA)(g/cm2)`, AusL$`Petal Dry Matter Content (PDMC) (g/g)`, method = "pearson") # Significant
-cor.test(AusL$`Specific Leaf Area (SLA)(cm2/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson") # Significant
-cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusL$`Petal Mass per Area (PMA)(g/cm2)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusL$`Petal Dry Matter Content (PDMC)(g/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") #Significant
-cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Specific Petal Area (SPA)(cm2/g)`, method = "pearson") # Significant
-cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-cor.test(AusL$`Specific Leaf Area (SLA)(cm2/g)`, AusL$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson")
-cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-cor.test(AusL$`Petal Dry Matter Content (PDMC)(g/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-
-
-
-## Crepis ----
-cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
-cor.test(AusC$`Petal Mass Per Area (PMA)(g/cm2)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
-cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson") 
-cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusC$`Petal Mass Per Area (PMA)(g/cm2)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson")
-cor.test(AusC$`Number of Seeds (SN)`, AusC$`Seed Mass (SM)(g)`, method = "pearson")
-cor.test(AusC$`Number of Seeds (SN)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
-cor.test(AusC$`Number of Seeds (SN)`, AusC$`Leaf Dry Matter Content (g/g)`, method = "pearson") # Significant
-cor.test(AusC$`Number of Seeds (SN)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson")
-cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Specific Petal Area (SPA)(cm2/g)`, method = "pearson") # Significant
-cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Number of Seeds (SN)`, method = "pearson")
-cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Seed Mass (SM)(g)`, method = "pearson")
-cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Number of Seeds (SN)`, method = "pearson")
-cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`,  AusC$`Seed Mass (SM)(g)`, method = "pearson")
-cor.test(AusC$`Petal Dry Matter Content (PDMC)(g/g)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusC$`Petal Dry Matter Content (PDMC)(g/g)`, AusC$`Number of Seeds (SN)`, method = "pearson")
-cor.test(AusC$`Petal Dry Matter Content (PDMC)(g/g)`, AusC$`Seed Mass (SM)(g)`, method = "pearson")
-cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Number of Seeds (SN)`, method = "pearson") 
-cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Seed Mass (SM)(g)`, method = "pearson") 
-cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Number of Seeds (SN)`, method = "pearson")
-cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Seed Mass (SM)(g)`, method = "pearson")
-cor.test(AusC$`Leaf Area (LA)(cm2)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson") # Significant
-cor.test(AusC$`Leaf Area (LA)(cm2)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-
-
-# Correlation Plots ----
-## Lotus ----
-?ggplot
-SPA_PDMC_Plot <- ggplot(AusL, aes(x = AusL$`Specific Petal Area (SPA)(cm2/g)`, y = AusL$`Petal Dry Matter Content (PDMC)(g/g)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Specific Petal Area (SPA) and Petal Dry Matter Content (PDMC)",
-       x = "Specfic Petal Area (SPA) (cm2/g)",
-       y = "Petal Dry Matter Content (PDMC) (g/g)") +
-  theme_minimal()
-print(SPA_PDMC_Plot)
-
-SPA_DA_Plot <- ggplot(AusL, aes(x = AusL$`Specific Petal Area (SPA)(cm2/g)`, y = AusL$`Display Area (DA)(cm2)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Specific Petal Area (SPA) and Display Area (DA)",
-       x = "Specfic Petal Area (SPA) (cm2/g)",
-       y = "Display Area (DA)(cm2)") +
-  theme_minimal()
-print(SPA_DA_Plot)
-
-DA_PDMC_Plot <- ggplot(AusL, aes(x = AusL$`Display Area (DA)(cm2)`, y = AusL$`Petal Dry Matter Content (PDMC)(g/g)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Display Area (DA) and Petal Dry Matter Content (PDMC)",
-       x = "Display Area (DA)(cm2)",
-       y = "Petal Dry Matter Content (PDMC)(g/g)") +
-  theme_minimal()
-print(DA_PDMC_Plot)
-
-SLA_LDMC_Plot <- ggplot(AusL, aes(x = AusL$`Specific Leaf Area (SLA) (cm2/g)`, y = AusL$`Leaf Dry Matter Content (LDMC) (g/g)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Lotus - SLA and LDMC",
-       x = "Specific Leaf Area (SLA) (cm2/g)",
-       y = "Leaf Dry Matter Content (LDMC) (g/g)") +
-  theme_minimal()
-print(SLA_LDMC_Plot)
-
-## Crepis ----
-
-SPA_DA_Plot <- ggplot(AusC, aes(x = AusC$`Specific Petal Area (SPA)(cm2/g)`, y = AusC$`Display Area (DA)(cm2)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Specific Petal Area (SPA) and Display Area (DA)",
-       x = "Specfic Petal Area (SPA)(cm2/g)",
-       y = "Display Area (DA)(cm2)") +
-  theme_minimal()
-print(SPA_DA_Plot)
-
-SPA_PDMC_Plot <- ggplot(AusC, aes(x = AusC$`Specific Petal Area (SPA)(cm2/g)`, y = AusC$`Petal Dry Matter Content (PDMC)(g/g)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Specific Petal Area (SPA) and Petal Dry Matter Content (PDMC)",
-       x = "Specfic Petal Area (SPA) (cm2/g)",
-       y = "Petal Dry Matter Content (PDMC) (g/g)") +
-  theme_minimal()
-print(SPA_PDMC_Plot)
-
-SLA_LA_Plot <- ggplot(AusC, aes(x = AusC$`Specific Leaf Area (SLA)(cm2/g)`, y = AusC$`Leaf Area (LA)(cm2)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Specific Leaf Area (SLA) and Leaf Area (LA)",
-       x = "Specific Leaf Area (SLA)",
-       y = "Leaf Area (LA)") +
-  theme_minimal()
-print(SLA_LA_Plot)
-
-SN_PDMC_Plot <- ggplot(AusC, aes(x = AusC$`Number of Seeds (SN)`, y = AusC$`Petal Dry Matter Content (PDMC)(g/g)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Crepis - SN and PDMC",
-       x = "Number of Seeds (SN)",
-       y = "Petal Dry Matter Content (PDMC) (g/g)") +
-  theme_minimal()
-print(SN_PDMC_Plot)
-
-SN_LDMC_Plot <- ggplot(AusC, aes(x = AusC$`Number of Seeds (SN)`, y = AusC$`Leaf Dry Matter Content (g/g)`)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Crepis - SN and LDMC",
-       x = "Number of Seeds (SN)",
-       y = "Leaf Dry Matter Content (g/g)") +
-  theme_minimal()
-print(SN_LDMC_Plot)
-
-combined_data <- AusC %>%
-  select(SN = `Number of Seeds (SN)`, PDMC = `Petal Dry Matter Content (PDMC)(g/g)`, LDMC = `Leaf Dry Matter Content (g/g)`) %>%
-  gather(key = "Type", value = "Content", PDMC, LDMC)
-
-# Create the combined plot
-combined_plot <- ggplot(combined_data, aes(x = SN, y = Content)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Crepis - SN and Dry Matter Content",
-       x = "Number of Seeds (SN)",
-       y = "Dry Matter Content (g/g)") +
-  facet_wrap(~Type, scales = "free_y") +
-  theme_minimal()
-
-print(combined_plot)
-
 
 
 # Correlogram ----
@@ -1255,201 +1785,6 @@ ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
         axis.ticks = element_blank()) +
   coord_fixed()
 
-
-# Variation Partitioning ----
-## For Lotus ----
-
-l_DA_var <- varpart(AusRDL$DA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
-l_DA_var$part$indfract$Adj.R.square <- l_DA_var$part$indfract$Adj.R.square *100
-plot(l_DA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-
-title(main = "Variance in DA of L. corniculatus")
-
-l_SPA_var <- varpart(AusRDL$SPA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
-l_SPA_var$part$indfract$Adj.R.square <- l_SPA_var$part$indfract$Adj.R.square *100
-plot(l_SPA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in SPA of L. corniculatus")
-
-l_PDMC_var <- varpart(AusRDL$PDMC, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
-l_PDMC_var$part$indfract$Adj.R.square <- l_PDMC_var$part$indfract$Adj.R.square *100
-plot(l_PDMC_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 2, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in PDMC of L. corniculatus")
-
-l_LA_var <- varpart(AusRDL$LA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
-l_LA_var$part$indfract$Adj.R.square <- l_LA_var$part$indfract$Adj.R.square *100
-plot(l_LA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 2, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in LA of L. corniculatus")
-
-l_SLA_var <- varpart(AusRDL$SLA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
-l_SLA_var$part$indfract$Adj.R.square <- l_SLA_var$part$indfract$Adj.R.square *100
-plot(l_SLA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in SLA of L. corniculatus")
-
-
-l_LDMC_var <- varpart(AusRDL$LDMC, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
-l_LDMC_var$part$indfract$Adj.R.square <- l_LDMC_var$part$indfract$Adj.R.square *100
-plot(l_LDMC_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in LDMC of L. corniculatus")
-
-l_at_var <- varpart(AusRDL[,c(9,18,20:23)], AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
-l_at_var$part$indfract$Adj.R.square <- l_at_var$part$indfract$Adj.R.square *100
-plot(l_at_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-
-## For Crepis ----
-
-c_DA_var <- varpart(AusRDC$DA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_DA_var$part$indfract$Adj.R.square <- c_DA_var$part$indfract$Adj.R.square *100
-plot(c_DA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in DA of C. capillaris")
-
-c_SPA_var <- varpart(AusRDC$SPA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_SPA_var$part$indfract$Adj.R.square <- c_SPA_var$part$indfract$Adj.R.square *100
-plot(c_SPA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 2, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in SPA of C. capillaris")
-
-c_PDMC_var <- varpart(AusRDC$PDMC, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_PDMC_var$part$indfract$Adj.R.square <- c_PDMC_var$part$indfract$Adj.R.square *100
-plot(c_PDMC_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in PDMC of C. capillaris")
-
-c_LA_var <- varpart(AusRDC$LA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_LA_var$part$indfract$Adj.R.square <- c_LA_var$part$indfract$Adj.R.square *100
-plot(c_LA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in LA of C. capillaris")
-
-c_SLA_var <- varpart(AusRDC$SLA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_SLA_var$part$indfract$Adj.R.square <- c_SLA_var$part$indfract$Adj.R.square *100
-plot(c_SLA_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in SLA of C. capillaris")
-
-c_LDMC_var <- varpart(AusRDC$LDMC, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_LDMC_var$part$indfract$Adj.R.square <- c_LDMC_var$part$indfract$Adj.R.square *100
-plot(c_LDMC_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in LDMC of C. capillaris")
-
-c_SN_var <- varpart(AusRDC$SN, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_SN_var$part$indfract$Adj.R.square <- c_SN_var$part$indfract$Adj.R.square *100
-plot(c_SN_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in SN of C. capillaris")
-
-c_SM_var <- varpart(AusRDC$SM, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_SM_var$part$indfract$Adj.R.square <- c_SM_var$part$indfract$Adj.R.square *100
-plot(c_SM_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 2, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in SM of C. capillaris")
-
-c_at_var <- varpart(AusRDC[,c(9,10,12:17)],AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
-c_at_var$part$indfract$Adj.R.square <- c_at_var$part$indfract$Adj.R.square *100
-plot(c_at_var,
-     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
-     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 2, # only show 2 digits
-     cex = 1.5)
-title(main = "Variance in SM of C. capillaris")
-
-
-# Correlation Networks ----
-## For Lotus ----
-View(Aus)
-l_cor
-l_corl_cor <- cor(AusRDL[,c(9,18,20:23)])
-l_network <- graph_from_adjacency_matrix(l_corl_cor, weighted = TRUE, mode = "undirected", diag = FALSE)
-plot(l_network)
-l_network_graph <- qgraph(
-  l_corl_cor, 
-  graph = "cor",  # Use partial correlations
-  layout = "spring", 
-  sampleSize = nrow(AusRDL[,c(9,18,20:23)]),
-  vsize = 6, 
-  cut = 0.2,  
-  maximum = 0.45, 
-  border.width = 1.5,
-  alpha = 0.05,
-  labels = c("DA", "SPA", "PDMC","LA", "SLA", "LDMC"),
-  posCol = "royalblue4",
-  negCol = "brown1"
-)
-
-## For Crepis ----
-c_corl_cor <- cor(AusRDC[,c(9,10,12:17)])
-c_corl_cor
-cor(AusRDC[,c(9,10,12:17)])
-c_network <- graph_from_adjacency_matrix(c_corl_cor, weighted=T, mode="undirected", diag=F)
-c_network_graph <- qgraph(c_corl_cor, 
-                          graph = "cor",  # Use partial correlations
-                          layout = "spring", 
-                          sampleSize = nrow(AusRDC[,c(9,10,12:17)]),
-                          vsize = 6, 
-                          cut = 0.2,  
-                          maximum = 0.45, 
-                          border.width = 1.5,
-                          labels = c("DA", "SPA", "PDMC", "LA","SLA", "LDMC", "SN", "SM"),
-                          posCol = "royalblue4",
-                          negCol = "brown1"
-)
-
-summary(c_sq_DAmodel)
-
-
 # Variance Partitioning using Barplot ----
 
 ## Creation of Separate Models ----
@@ -1517,7 +1852,7 @@ all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
 ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
+  labs(x = NULL, y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
   scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
                     labels = c("CO2", "(CO2 + Temperature) : Drought", "CO2 : Temperature", "Drought", "Temperature")) +
   coord_flip() +
@@ -1564,7 +1899,7 @@ all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
 ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
+  labs(x = NULL, y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
   scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
                     labels = c("CO2", "(CO2 + Temperature) : Drought", "CO2 : Temperature", "Drought", "Temperature")) +
   coord_flip() +
@@ -1715,7 +2050,7 @@ all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
 ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
+  labs(x = NULL, y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
   scale_fill_manual(values = c("#f7756d", "#00bfc4")) +
   coord_flip() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
